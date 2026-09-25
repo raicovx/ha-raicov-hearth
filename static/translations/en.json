@@ -594,6 +594,7 @@
 	"hearth_must_not_match": "Must not match",
 	"hearth_entity_state": "Entity state",
 	"hearth_calendar_entities_comma_separated": "Calendar entities (comma separated)",
+	"hearth_calendar_exclude_comma_separated": "Skip events whose title contains (comma separated, optional)",
 	"hearth_travel_time_entity_minutes_optional": "Travel time entity (minutes, optional)",
 	"hearth_look_ahead_hours_default_24": "Look-ahead hours (default 24)",
 	"hearth_time_zone": "Time zone",

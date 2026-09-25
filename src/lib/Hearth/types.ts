@@ -94,6 +94,8 @@ type RailWidgetVariant =
 			entities?: string[];
 			travel_entity?: string;
 			lookahead_hours?: number;
+			// events whose title contains any of these, ignoring case, are skipped
+			exclude?: string[];
 	  }
 	| { id: string; type: 'status'; icon?: string; text?: string; entity?: string }
 	| {

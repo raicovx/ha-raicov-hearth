@@ -1,7 +1,12 @@
 import * as v from 'valibot';
 import type { RailWidget } from '../../types';
 import type { WidgetDefinition } from '../types';
-import { OptionalEntityId, OptionalEntityIdList, optionalNumberAtLeast } from '../../schema';
+import {
+	OptionalEntityId,
+	OptionalEntityIdList,
+	OptionalTextList,
+	optionalNumberAtLeast
+} from '../../schema';
 import { normalizeWholeNumber, trimmedOrUndefined } from '../../normalizers';
 
 export type CalendarWidget = Extract<RailWidget, { type: 'calendar' }>;
@@ -17,12 +22,19 @@ export const calendarWidget: WidgetDefinition<CalendarWidget> = {
 			(entry: unknown): entry is string => typeof entry === 'string'
 		),
 		travel_entity: trimmedOrUndefined(widget.travel_entity),
-		lookahead_hours: normalizeWholeNumber(widget.lookahead_hours, 1)
+		lookahead_hours: normalizeWholeNumber(widget.lookahead_hours, 1),
+		exclude: Array.isArray(widget.exclude)
+			? widget.exclude
+					.filter((entry: unknown): entry is string => typeof entry === 'string')
+					.map((entry: string) => entry.trim())
+					.filter(Boolean)
+			: undefined
 	}),
 	schema: v.looseObject({
 		entities: OptionalEntityIdList,
 		travel_entity: OptionalEntityId,
-		lookahead_hours: optionalNumberAtLeast(1)
+		lookahead_hours: optionalNumberAtLeast(1),
+		exclude: OptionalTextList
 	}),
 	needsConfiguration: (widget) => !widget.entities?.length,
 	entityIds: (widget) => [

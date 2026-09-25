@@ -43,12 +43,14 @@
 	$effect(() => {
 		void widget.entities;
 		void widget.lookahead_hours;
+		void widget.exclude;
 		next = null;
 	});
 
 	$effect(() => {
 		const entities = widget.entities ?? [];
 		const lookaheadHours = widget.lookahead_hours ?? 24;
+		const exclude = (widget.exclude ?? []).map((word) => word.toLowerCase()).filter(Boolean);
 		if (!$connected || !entities.length) return;
 
 		async function fetchNext() {
@@ -61,6 +63,10 @@
 			)
 				.map(parseEvent)
 				.filter((event): event is NextEvent => event !== null)
+				.filter((event) => {
+					const title = event.title.toLowerCase();
+					return !exclude.some((word) => title.includes(word));
+				})
 				.sort((a, b) => a.start.getTime() - b.start.getTime());
 			return events[0] ?? null;
 		}

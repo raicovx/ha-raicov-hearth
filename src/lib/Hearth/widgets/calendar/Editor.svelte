@@ -17,6 +17,7 @@
 	let lookaheadHours = $state(
 		typeof initial?.lookahead_hours === 'number' ? String(initial.lookahead_hours) : ''
 	);
+	let exclude = $state((initial?.exclude ?? []).join(', '));
 
 	$effect(() => {
 		const parsedHours = numberFromInput(lookaheadHours);
@@ -27,7 +28,11 @@
 					.map((entry) => entry.trim())
 					.filter(Boolean),
 				travel_entity: travelEntity.trim() || undefined,
-				lookahead_hours: Number.isFinite(parsedHours) && parsedHours > 0 ? parsedHours : undefined
+				lookahead_hours: Number.isFinite(parsedHours) && parsedHours > 0 ? parsedHours : undefined,
+				exclude: exclude
+					.split(',')
+					.map((entry) => entry.trim())
+					.filter(Boolean)
 			}
 		});
 	});
@@ -47,4 +52,9 @@
 	label={$lang('hearth_look_ahead_hours_default_24')}
 	bind:value={lookaheadHours}
 	placeholder="24"
+/>
+<TextField
+	label={$lang('hearth_calendar_exclude_comma_separated')}
+	bind:value={exclude}
+	placeholder="birthday, reminder"
 />
