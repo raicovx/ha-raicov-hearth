@@ -99,7 +99,15 @@ type RailWidgetVariant =
 			// events whose title contains any of these, ignoring case, are skipped
 			exclude?: string[];
 	  }
-	| { id: string; type: 'status'; icon?: string; text?: string; entity?: string }
+	// icon_color is any CSS colour; the icon still dims while the entity is unavailable
+	| {
+			id: string;
+			type: 'status';
+			icon?: string;
+			icon_color?: string;
+			text?: string;
+			entity?: string;
+	  }
 	| {
 			id: string;
 			type: 'entity';

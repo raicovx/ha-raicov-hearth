@@ -14,9 +14,15 @@ export const statusWidget: WidgetDefinition<StatusWidget> = {
 	icon: 'eco',
 	normalize: (widget) => ({
 		icon: trimmedOrUndefined(widget.icon),
+		icon_color: trimmedOrUndefined(widget.icon_color),
 		text: trimmedOrUndefined(widget.text),
 		entity: trimmedOrUndefined(widget.entity)
 	}),
-	schema: v.looseObject({ icon: OptionalText, text: OptionalText, entity: OptionalEntityId }),
+	schema: v.looseObject({
+		icon: OptionalText,
+		icon_color: OptionalText,
+		text: OptionalText,
+		entity: OptionalEntityId
+	}),
 	entityIds: (widget) => (widget.entity ? [widget.entity] : [])
 };

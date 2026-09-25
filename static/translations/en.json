@@ -439,6 +439,7 @@
 	"hearth_move_entity_down": "Move entity down",
 	"hearth_remove_entity": "Remove entity",
 	"hearth_name_optional": "Name (optional)",
+	"hearth_icon_color": "Icon color",
 	"hearth_icon_optional": "Icon (optional)",
 	"hearth_display": "Display",
 	"hearth_show_active_count_in_header": "Show active count in header",

@@ -103,6 +103,13 @@ describe('rail widgets', () => {
 		expect(container.textContent).toContain(en.hearth_status_all_clear);
 	});
 
+	it('draws the status icon in its configured colour', () => {
+		const { container } = render(RailWidgetRenderer, {
+			widget: widget({ type: 'status', text: 'Power', icon_color: '#ff8800' })
+		});
+		expect(container.querySelector<HTMLElement>('.mi')?.style.color).toBe('rgb(255, 136, 0)');
+	});
+
 	it('says there is no history for an empty timeline, as the line chart does', async () => {
 		render(RailWidgetRenderer, {
 			widget: widget({ type: 'chart', entity: 'sensor.power', style: 'history' })

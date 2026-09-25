@@ -2,6 +2,7 @@
 	import { lang } from '$lib/core/i18n';
 	import type { WidgetEditorProps } from '../types';
 	import type { StatusWidget } from './descriptor';
+	import ColorField from '../../edit/ColorField.svelte';
 	import EntityField from '../../edit/EntityField.svelte';
 	import IconField from '../../edit/IconField.svelte';
 	import TextField from '../../edit/TextField.svelte';
@@ -14,12 +15,14 @@
 
 	let text = $state(initial?.text ?? '');
 	let icon = $state(initial?.icon ?? '');
+	let iconColor = $state(initial?.icon_color ?? '');
 	let entity = $state(initial?.entity ?? '');
 
 	$effect(() => {
 		onchange({
 			fields: {
 				icon: icon.trim() || undefined,
+				icon_color: iconColor.trim() || undefined,
 				text: text.trim() || undefined,
 				entity: entity.trim() || undefined
 			}
@@ -39,7 +42,22 @@
 		<IconField label={$lang('icon')} bind:value={icon} placeholder="eco" />
 	</div>
 </div>
+<div class="color-row">
+	<ColorField
+		label={$lang('hearth_icon_color')}
+		value={iconColor}
+		placeholder={$lang('hearth_default')}
+		onchange={(value) => (iconColor = value)}
+		onclear={() => (iconColor = '')}
+	/>
+</div>
 <EntityField label={$lang('hearth_entity_optional_appends_its_state')} bind:value={entity} />
 <div class="hint">
 	{$lang('hearth_leave_text_and_entity_empty_to')}
 </div>
+
+<style>
+	.color-row {
+		margin-bottom: 14px;
+	}
+</style>

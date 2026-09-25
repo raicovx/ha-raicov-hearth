@@ -11,6 +11,7 @@
 
 	let { widget }: { widget: StatusWidget } = $props();
 	let icon = $derived(widget.icon ?? 'eco');
+	let iconColor = $derived(widget.icon_color);
 	let text = $derived(widget.text);
 	let entity = $derived(widget.entity);
 
@@ -46,14 +47,18 @@
 	{:else}
 		{#if $hearthEditMode}
 			<div class="status-pill inactive">
-				<Icon name={icon} size={ICON.control} color="var(--h-icon)" />
+				<Icon name={icon} size={ICON.control} color={iconColor ?? 'var(--h-icon)'} />
 				<span class="pill-text">{$lang('hearth_status_all_clear')}</span>
 			</div>
 		{/if}
 	{/each}
 {:else}
 	{#snippet content()}
-		<Icon name={icon} size={ICON.control} color={unavailable ? 'var(--h-icon)' : 'var(--h-good)'} />
+		<Icon
+			name={icon}
+			size={ICON.control}
+			color={unavailable ? 'var(--h-icon)' : (iconColor ?? 'var(--h-good)')}
+		/>
 		<span class="pill-text">{label}</span>
 	{/snippet}
 	{#if stateObj}
@@ -79,6 +84,7 @@
 		background: rgb(var(--h-surface-rgb) / calc(0.04 * var(--h-fill-scale)));
 		backdrop-filter: var(--h-surface-blur);
 		box-shadow: var(--h-card-shadow);
+		margin-bottom: 8px;
 		width: 100%;
 		border: 0;
 		font: inherit;
