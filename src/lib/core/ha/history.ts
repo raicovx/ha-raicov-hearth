@@ -69,17 +69,32 @@ export async function fetchStatistics(
 	return result ?? {};
 }
 
-/** The mean (or last state) per bucket for one statistic; null with fewer than two points. */
+/**
+ * The mean (or last state) per bucket; null with fewer than two points. Given
+ * several statistics, each bucket averages those that have a value for it, so
+ * a sensor with gaps does not shift the others.
+ */
 export async function fetchStatisticSeries(
-	statisticId: string,
+	statisticIds: string | string[],
 	start: Date,
 	end: Date,
 	period: StatisticPeriod
 ): Promise<number[] | null> {
-	const rows = (await fetchStatistics([statisticId], start, end, period))[statisticId] ?? [];
-	const values = rows
-		.map((row) => row.mean ?? row.state)
-		.filter((entry): entry is number => typeof entry === 'number');
+	const ids = typeof statisticIds === 'string' ? [statisticIds] : statisticIds;
+	const result = await fetchStatistics(ids, start, end, period);
+	const buckets = new Map<number, number[]>();
+	for (const id of ids) {
+		for (const row of result[id] ?? []) {
+			const value = row.mean ?? row.state;
+			if (typeof value !== 'number') continue;
+			const bucket = buckets.get(row.start);
+			if (bucket) bucket.push(value);
+			else buckets.set(row.start, [value]);
+		}
+	}
+	const values = [...buckets]
+		.sort(([a], [b]) => a - b)
+		.map(([, entries]) => entries.reduce((sum, entry) => sum + entry, 0) / entries.length);
 	return values.length < 2 ? null : values;
 }
 

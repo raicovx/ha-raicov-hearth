@@ -2,7 +2,12 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { callService } from 'home-assistant-js-websocket';
 import type { Connection } from 'home-assistant-js-websocket';
 import { connection, health } from './connection';
-import { cachedData, callServiceForResult, startDataRefresh } from './history';
+import {
+	cachedData,
+	callServiceForResult,
+	fetchStatisticSeries,
+	startDataRefresh
+} from './history';
 
 vi.mock('home-assistant-js-websocket', async (importOriginal) => ({
 	...(await importOriginal<typeof import('home-assistant-js-websocket')>()),
@@ -91,5 +96,33 @@ describe('startDataRefresh', () => {
 		await vi.advanceTimersByTimeAsync(1001);
 		expect(await cachedData('temperature:sensor.office', load, 1000)).toBe('points');
 		expect(load).toHaveBeenCalledTimes(2);
+	});
+});
+
+describe('fetchStatisticSeries', () => {
+	it('averages several statistics hour by hour, skipping the gaps in each', async () => {
+		const sendMessagePromise = vi.fn().mockResolvedValue({
+			'sensor.lounge': [
+				{ start: 1, end: 2, mean: 20 },
+				{ start: 2, end: 3, mean: 22 },
+				{ start: 3, end: 4, mean: 24 }
+			],
+			// no row for the second hour
+			'sensor.kitchen': [
+				{ start: 1, end: 2, mean: 18 },
+				{ start: 3, end: 4, mean: 20 }
+			]
+		});
+		connection.set({ sendMessagePromise } as unknown as Connection);
+		const series = await fetchStatisticSeries(
+			['sensor.lounge', 'sensor.kitchen'],
+			new Date(0),
+			new Date(1),
+			'hour'
+		);
+		expect(series).toEqual([19, 22, 22]);
+		expect(sendMessagePromise).toHaveBeenCalledWith(
+			expect.objectContaining({ statistic_ids: ['sensor.lounge', 'sensor.kitchen'] })
+		);
 	});
 });

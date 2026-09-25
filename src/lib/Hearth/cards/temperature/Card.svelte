@@ -10,11 +10,22 @@
 	import { sensorNumber } from '$lib/core/ha/entities';
 	import { setClimateTemperature } from '$lib/core/domains/climate';
 	import { formatReading } from '../../format';
+	import { temperatureSensors } from '../../model/cards/temperature';
 	import Icon from '../../Icon.svelte';
 
 	let { card }: { card: Extract<OverviewCard, { type: 'temperature' }> } = $props();
 
-	let value = $derived(sensorNumber(card.entity ? $states?.[card.entity]?.state : undefined));
+	let sensors = $derived(temperatureSensors(card));
+	// the mean of the sensors reporting a number; an offline one drops out
+	// rather than dragging the reading down
+	let value = $derived.by(() => {
+		const readings = sensors
+			.map((id) => sensorNumber($states?.[id]?.state))
+			.filter((reading): reading is number => reading !== null);
+		return readings.length
+			? readings.reduce((sum, reading) => sum + reading, 0) / readings.length
+			: null;
+	});
 	let verdict = $derived(
 		airQualityVerdict(
 			card.entity ? $states?.[card.entity]?.attributes?.device_class : undefined,
@@ -46,25 +57,22 @@
 
 	let history = $state<number[] | null>(null);
 
+	let sensorKey = $derived(sensors.join(','));
+
 	$effect(() => {
-		void card.entity;
+		void sensorKey;
 		history = null;
 	});
 
 	// last 24h of hourly means for the history chart
 	$effect(() => {
-		const entityId = card.entity;
-		if (!$connected || !entityId) return;
+		const ids = sensorKey ? sensorKey.split(',') : [];
+		if (!$connected || !ids.length) return;
 
 		return startDataRefresh(
 			() =>
-				cachedData(`temperature-history:${entityId}`, () =>
-					fetchStatisticSeries(
-						entityId,
-						new Date(Date.now() - 24 * 3600 * 1000),
-						new Date(),
-						'hour'
-					)
+				cachedData(`temperature-history:${sensorKey}`, () =>
+					fetchStatisticSeries(ids, new Date(Date.now() - 24 * 3600 * 1000), new Date(), 'hour')
 				),
 			(values) => (history = values)
 		);

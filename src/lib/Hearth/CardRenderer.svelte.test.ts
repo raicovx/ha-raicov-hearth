@@ -48,4 +48,21 @@ describe('RailWidgetRenderer', () => {
 		render(RailWidgetRenderer, { widget: { id: 'n', type: 'energy' } });
 		expect(screen.getByText('Configure Energy today')).toBeTruthy();
 	});
+
+	it("shows the mean of a temperature card's reporting sensors", () => {
+		states.set({
+			'sensor.lounge': hassEntity('sensor.lounge', '21.2'),
+			'sensor.kitchen': hassEntity('sensor.kitchen', '19.4'),
+			'sensor.hall': hassEntity('sensor.hall', 'unavailable')
+		});
+		render(CardRenderer, {
+			card: {
+				id: 't',
+				type: 'temperature',
+				entity: 'sensor.lounge',
+				entities: ['sensor.kitchen', 'sensor.hall']
+			}
+		});
+		expect(screen.getByText('20.3')).toBeTruthy();
+	});
 });

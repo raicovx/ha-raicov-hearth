@@ -153,6 +153,8 @@ type OverviewCardVariant =
 			type: 'temperature';
 			label?: string;
 			entity?: string;
+			// further sensors averaged with entity, for a room with several
+			entities?: string[];
 			unit?: string;
 			// climate entity that turns the card into a thermostat: target readout,
 			// +/- controls and a dashed target line on the history chart
