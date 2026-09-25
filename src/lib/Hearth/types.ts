@@ -198,6 +198,21 @@ type OverviewCardVariant =
 			// restores the one-tap Clean/Stop button next to the summary row
 			quick_action?: boolean;
 	  }
+	// a car summary row in the vacuum card's shape: battery and last charge in
+	// the status line, tyre pressures in the popover, and a one-tap climate
+	// start when climate_entity (a climate or switch entity) is set
+	| {
+			id: string;
+			type: 'tesla';
+			title?: string;
+			battery_entity?: string;
+			last_charge_entity?: string;
+			tire_front_left_entity?: string;
+			tire_front_right_entity?: string;
+			tire_rear_left_entity?: string;
+			tire_rear_right_entity?: string;
+			climate_entity?: string;
+	  }
 	// the general-purpose grid: any mix of domains, tiles adapt per domain
 	// (lights dim on drag, covers show position). `stat` renders big sensor
 	// readouts instead of tiles; `columns` fixes the column count.

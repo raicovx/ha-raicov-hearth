@@ -176,6 +176,60 @@ function initialStates() {
 				supported_features: 14204
 			}
 		},
+		'sensor.model_y_battery': {
+			s: '76',
+			a: { friendly_name: 'Model Y battery', unit_of_measurement: '%', device_class: 'battery' }
+		},
+		'sensor.model_y_last_charge': {
+			s: '24.6',
+			a: {
+				friendly_name: 'Model Y charge energy added',
+				unit_of_measurement: 'kWh',
+				device_class: 'energy'
+			}
+		},
+		'sensor.model_y_tire_front_left': {
+			s: '42.1',
+			a: {
+				friendly_name: 'Model Y tire front left',
+				unit_of_measurement: 'psi',
+				device_class: 'pressure'
+			}
+		},
+		'sensor.model_y_tire_front_right': {
+			s: '42.0',
+			a: {
+				friendly_name: 'Model Y tire front right',
+				unit_of_measurement: 'psi',
+				device_class: 'pressure'
+			}
+		},
+		'sensor.model_y_tire_rear_left': {
+			s: '41.8',
+			a: {
+				friendly_name: 'Model Y tire rear left',
+				unit_of_measurement: 'psi',
+				device_class: 'pressure'
+			}
+		},
+		'sensor.model_y_tire_rear_right': {
+			s: '42.3',
+			a: {
+				friendly_name: 'Model Y tire rear right',
+				unit_of_measurement: 'psi',
+				device_class: 'pressure'
+			}
+		},
+		'climate.model_y': {
+			s: 'off',
+			a: {
+				friendly_name: 'Model Y climate',
+				current_temperature: 14.5,
+				temperature: 21,
+				hvac_modes: ['off', 'heat_cool'],
+				supported_features: 385
+			}
+		},
 		'scene.evening': { s: '2026-09-05T18:00:00+00:00', a: { friendly_name: 'Evening' } },
 		'scene.movie': { s: 'unknown', a: { friendly_name: 'Movie night' } },
 		'scene.bright': { s: 'unknown', a: { friendly_name: 'Bright' } },

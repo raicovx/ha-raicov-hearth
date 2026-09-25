@@ -14,6 +14,7 @@ import { mediaCard } from './media/descriptor';
 import { scenesCard } from './scenes/descriptor';
 import { temperatureCard } from './temperature/descriptor';
 import { templateCard } from './template/descriptor';
+import { teslaCard } from './tesla/descriptor';
 import { vacuumCard } from './vacuum/descriptor';
 
 export type { CardDescriptor, CardDraft, CardEditorProps, CardFields } from './types';
@@ -24,6 +25,7 @@ const REGISTERED = [
 	temperatureCard,
 	mediaCard,
 	vacuumCard,
+	teslaCard,
 	cameraCard,
 	imageCard,
 	climateCard,

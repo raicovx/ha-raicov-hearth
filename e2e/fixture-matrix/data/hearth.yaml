@@ -187,6 +187,16 @@ rooms:
           entity: vacuum.robot
           quick_action: true
           battery_entity: sensor.humidity
+        - id: tesla
+          type: tesla
+          title: Model Y
+          battery_entity: sensor.model_y_battery
+          last_charge_entity: sensor.model_y_last_charge
+          tire_front_left_entity: sensor.model_y_tire_front_left
+          tire_front_right_entity: sensor.model_y_tire_front_right
+          tire_rear_left_entity: sensor.model_y_tire_rear_left
+          tire_rear_right_entity: sensor.model_y_tire_rear_right
+          climate_entity: climate.model_y
         - id: now-playing
           type: conditional_media
           media_players:
