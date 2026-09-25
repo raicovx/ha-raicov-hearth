@@ -2,6 +2,7 @@ import * as v from 'valibot';
 import type { RailWidget } from '../../types';
 import type { WidgetDefinition } from '../types';
 import { OptionalText } from '../../schema';
+import { trimmedOrUndefined } from '../../normalizers';
 
 export type TemplateWidget = Extract<RailWidget, { type: 'template' }>;
 
@@ -13,9 +14,11 @@ export const templateWidget: WidgetDefinition<TemplateWidget> = {
 	icon: 'code',
 	normalize: (widget) => ({
 		template:
-			typeof widget.template === 'string' && widget.template.trim() ? widget.template : undefined
+			typeof widget.template === 'string' && widget.template.trim() ? widget.template : undefined,
+		title: trimmedOrUndefined(widget.title),
+		icon: trimmedOrUndefined(widget.icon)
 	}),
-	schema: v.looseObject({ template: OptionalText }),
+	schema: v.looseObject({ template: OptionalText, title: OptionalText, icon: OptionalText }),
 	needsConfiguration: (widget) => !widget.template,
 	entityIds: () => []
 };

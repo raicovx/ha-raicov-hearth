@@ -128,7 +128,7 @@ type RailWidgetVariant =
 			math?: string;
 			stroke?: number;
 	  }
-	| { id: string; type: 'template'; template?: string }
+	| { id: string; type: 'template'; template?: string; title?: string; icon?: string }
 	| { id: string; type: 'timer'; entity?: string; name?: string }
 	| { id: string; type: 'notifications' }
 	| { id: string; type: 'iframe'; url?: string; height?: number };
@@ -242,6 +242,8 @@ type OverviewCardVariant =
 	| { id: string; type: 'scenes'; title?: string; style?: 'chips' | 'bar'; scenes: SceneRef[] }
 	// days since an input_datetime was last reset, with a one-tap reset
 	| { id: string; type: 'days_since'; entity?: string; title?: string; icon?: string }
+	// a Jinja template rendered by Home Assistant as Markdown, beside an icon
+	| { id: string; type: 'template'; template?: string; title?: string; icon?: string }
 	// the media card for whichever listed player is active; a paused player
 	// keeps the card for timeout seconds before the next one takes over
 	| {

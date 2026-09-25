@@ -13,6 +13,7 @@ import { imageCard } from './image/descriptor';
 import { mediaCard } from './media/descriptor';
 import { scenesCard } from './scenes/descriptor';
 import { temperatureCard } from './temperature/descriptor';
+import { templateCard } from './template/descriptor';
 import { vacuumCard } from './vacuum/descriptor';
 
 export type { CardDescriptor, CardDraft, CardEditorProps, CardFields } from './types';
@@ -28,6 +29,7 @@ const REGISTERED = [
 	climateCard,
 	scenesCard,
 	daysSinceCard,
+	templateCard,
 	conditionalMediaCard
 ] as const;
 
