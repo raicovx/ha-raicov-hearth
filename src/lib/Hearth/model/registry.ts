@@ -9,6 +9,7 @@ import { headerCard } from './cards/header';
 import { imageCard } from './cards/image';
 import { mediaCard } from './cards/media';
 import { scenesCard } from './cards/scenes';
+import { spotifyRecentCard } from './cards/spotify_recent';
 import { temperatureCard } from './cards/temperature';
 import { templateCard } from './cards/template';
 import { teslaCard } from './cards/tesla';
@@ -23,6 +24,7 @@ export const CARD_DEFINITIONS = [
 	imageCard,
 	mediaCard,
 	scenesCard,
+	spotifyRecentCard,
 	temperatureCard,
 	templateCard,
 	teslaCard,

@@ -12,6 +12,7 @@ import { headerCard } from './header/descriptor';
 import { imageCard } from './image/descriptor';
 import { mediaCard } from './media/descriptor';
 import { scenesCard } from './scenes/descriptor';
+import { spotifyRecentCard } from './spotify_recent/descriptor';
 import { temperatureCard } from './temperature/descriptor';
 import { templateCard } from './template/descriptor';
 import { teslaCard } from './tesla/descriptor';
@@ -24,6 +25,7 @@ const REGISTERED = [
 	headerCard,
 	temperatureCard,
 	mediaCard,
+	spotifyRecentCard,
 	vacuumCard,
 	teslaCard,
 	cameraCard,

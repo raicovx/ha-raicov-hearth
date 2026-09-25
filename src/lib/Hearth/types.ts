@@ -259,6 +259,17 @@ type OverviewCardVariant =
 	| { id: string; type: 'days_since'; entity?: string; title?: string; icon?: string }
 	// a Jinja template rendered by Home Assistant as Markdown, beside an icon
 	| { id: string; type: 'template'; template?: string; title?: string; icon?: string }
+	// the Spotify account's recently played tracks through SpotifyPlus; a tap
+	// plays the track again, from its album or playlist when it had one.
+	// limit caps the row (at most 50), default_device as on the media card
+	| {
+			id: string;
+			type: 'spotify_recent';
+			entity?: string;
+			title?: string;
+			limit?: number;
+			default_device?: string;
+	  }
 	// the media card for whichever listed player is active; a paused player
 	// keeps the card for timeout seconds before the next one takes over
 	| {

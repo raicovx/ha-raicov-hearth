@@ -137,6 +137,11 @@ function initialStates() {
 				source: 'Spotify'
 			}
 		},
+		// SpotifyPlus twin of the account, which answers the play-history lookup
+		'media_player.spotifyplus_home': {
+			s: 'idle',
+			a: { friendly_name: 'SpotifyPlus', sp_user_id: 'home', supported_features: 152511 }
+		},
 		'media_player.kitchen': {
 			s: 'paused',
 			a: {
@@ -596,6 +601,23 @@ function calendarEvents(start) {
 	};
 }
 
+function recentTracks() {
+	const played = (minutes, name, artist, uri, context) => ({
+		played_at: new Date(Date.now() - minutes * 60_000).toISOString(),
+		context,
+		track: { name, uri, artists: [{ name: artist }], album: { images: [] } }
+	});
+	const album = { type: 'album', uri: 'spotify:album:kind-of-blue' };
+	return {
+		items: [
+			played(8, 'So What', 'Miles Davis', 'spotify:track:1', album),
+			played(17, 'Freddie Freeloader', 'Miles Davis', 'spotify:track:2', album),
+			played(40, 'Take Five', 'The Dave Brubeck Quartet', 'spotify:track:3', null),
+			played(55, 'So What', 'Miles Davis', 'spotify:track:1', album)
+		]
+	};
+}
+
 function forecast() {
 	const conditions = ['sunny', 'partlycloudy', 'rainy', 'cloudy', 'sunny', 'clear-night', 'snowy'];
 	return conditions.map((condition, index) => {
@@ -642,7 +664,8 @@ function handleMessage(socket, message) {
 				switch: { turn_on: {}, turn_off: {}, toggle: {} },
 				cover: { open_cover: {}, close_cover: {}, set_cover_position: {} },
 				climate: { set_temperature: {}, set_hvac_mode: {} },
-				calendar: { get_events: {} }
+				calendar: { get_events: {} },
+				spotifyplus: { get_player_recent_tracks: {}, get_spotify_connect_devices: {} }
 			});
 			return;
 		case 'persistent_notification/subscribe':
@@ -668,6 +691,33 @@ function handleMessage(socket, message) {
 				reply({
 					context: { id: 'ctx' },
 					response: calendarEvents(new Date(merged.start_date_time ?? Date.now()))
+				});
+				return;
+			}
+			if (domain === 'spotifyplus' && service === 'get_player_recent_tracks') {
+				reply({ context: { id: 'ctx' }, response: { result: recentTracks() } });
+				return;
+			}
+			if (domain === 'spotifyplus' && service === 'get_spotify_connect_devices') {
+				reply({
+					context: { id: 'ctx' },
+					response: {
+						result: {
+							Items: [
+								{
+									Id: 'kitchen',
+									Name: 'Kitchen speaker',
+									DiscoveryResult: { DeviceType: 'Speaker' }
+								},
+								{
+									Id: 'tv',
+									Name: 'Living room TV',
+									IsActiveDevice: true,
+									DiscoveryResult: { DeviceType: 'TV' }
+								}
+							]
+						}
+					}
 				});
 				return;
 			}

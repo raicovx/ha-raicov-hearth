@@ -182,6 +182,10 @@ rooms:
               uri: spotify:playlist:1
             - name: Jazz
               uri: spotify:playlist:2
+        - id: spotify-recent
+          type: spotify_recent
+          entity: media_player.living
+          limit: 12
         - id: vacuum
           type: vacuum
           entity: vacuum.robot
