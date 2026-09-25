@@ -52,6 +52,8 @@ type RailWidgetVariant =
 			timezone?: string;
 			hour_format?: 'auto' | '12' | '24';
 			show_seconds?: boolean;
+			// large when absent
+			size?: 'small' | 'medium' | 'large';
 	  }
 	| { id: string; type: 'weather'; entity?: string }
 	| { id: string; type: 'search' }

@@ -211,6 +211,25 @@ describe('normalizeHearthConfig', () => {
 		expect(config.rooms[0].icon).toBe('meeting_room');
 	});
 
+	it('keeps a smaller clock size and drops the large default', () => {
+		const config = normalizeHearthConfig({
+			rail: [
+				{ id: 'small', type: 'clock', size: 'small' },
+				{ id: 'large', type: 'clock', size: 'large' },
+				{ id: 'bogus', type: 'clock', size: 'huge' }
+			],
+			rooms: []
+		});
+		expect(config.rail.map((widget) => (widget as { size?: string }).size)).toEqual([
+			'small',
+			undefined,
+			undefined
+		]);
+		expect(
+			hearthConfigIssues({ rail: [{ id: 'c', type: 'clock', size: 'huge' }], rooms: [] })
+		).toEqual(['rail[0].size must be small, medium or large']);
+	});
+
 	it('expands entity wildcards deterministically', () => {
 		expect(
 			wildcardEntityIds('light.kitchen_*', [

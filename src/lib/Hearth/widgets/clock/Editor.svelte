@@ -6,6 +6,8 @@
 	import SelectField from '../../edit/SelectField.svelte';
 	import TextField from '../../edit/TextField.svelte';
 
+	type ClockSize = NonNullable<ClockWidget['size']>;
+
 	let { initial: initialProp, onchange }: WidgetEditorProps<ClockWidget> = $props();
 
 	// remounted per target and type, so the initial value is all the form needs
@@ -15,6 +17,7 @@
 	let timezone = $state(initial?.timezone ?? '');
 	let hourFormat = $state<ClockHourFormat>(initial?.hour_format ?? 'auto');
 	let showSeconds = $state(initial?.show_seconds ?? false);
+	let size = $state<ClockSize>(initial?.size ?? 'large');
 	let timezoneValid = $derived(!timezone.trim() || !!validTimeZone(timezone));
 
 	$effect(() => {
@@ -22,7 +25,8 @@
 			fields: {
 				timezone: validTimeZone(timezone),
 				hour_format: hourFormat === 'auto' ? undefined : hourFormat,
-				show_seconds: showSeconds || undefined
+				show_seconds: showSeconds || undefined,
+				size: size === 'large' ? undefined : size
 			},
 			valid: timezoneValid
 		});
@@ -38,6 +42,15 @@
 		{ value: 'auto', label: $lang('hearth_locale_default') },
 		{ value: '12', label: $lang('hearth_12_hour') },
 		{ value: '24', label: $lang('hearth_24_hour') }
+	]}
+/>
+<SelectField
+	label={$lang('hearth_clock_size')}
+	bind:value={size}
+	options={[
+		{ value: 'small', label: $lang('hearth_clock_size_small') },
+		{ value: 'medium', label: $lang('hearth_clock_size_medium') },
+		{ value: 'large', label: $lang('hearth_clock_size_large') }
 	]}
 />
 <label class="check"

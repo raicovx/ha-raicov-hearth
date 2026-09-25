@@ -535,6 +535,7 @@ export const TYPE_SCALE: Record<string, number> = {
 	'display-sm': 30,
 	display: 34,
 	hero: 44,
+	'clock-medium': 60,
 	clock: 80
 };
 

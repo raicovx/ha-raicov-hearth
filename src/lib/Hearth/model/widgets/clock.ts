@@ -15,12 +15,14 @@ export const clockWidget: WidgetDefinition<ClockWidget> = {
 	normalize: (widget) => ({
 		timezone: validTimeZone(widget.timezone),
 		hour_format: ['auto', '12', '24'].includes(widget.hour_format) ? widget.hour_format : undefined,
-		show_seconds: widget.show_seconds === true ? true : undefined
+		show_seconds: widget.show_seconds === true ? true : undefined,
+		size: ['small', 'medium'].includes(widget.size) ? widget.size : undefined
 	}),
 	schema: v.looseObject({
 		timezone: OptionalText,
 		hour_format: v.optional(v.picklist(['auto', '12', '24'], 'must be auto, 12 or 24')),
-		show_seconds: OptionalFlag
+		show_seconds: OptionalFlag,
+		size: v.optional(v.picklist(['small', 'medium', 'large'], 'must be small, medium or large'))
 	}),
 	entityIds: () => []
 };

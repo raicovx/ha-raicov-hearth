@@ -9,4 +9,5 @@
 	timezone={widget.timezone}
 	hour_format={widget.hour_format}
 	show_seconds={widget.show_seconds}
+	size={widget.size}
 />

@@ -11,8 +11,20 @@
 	let {
 		timezone,
 		hour_format = 'auto',
-		show_seconds = false
-	}: { timezone?: string; hour_format?: ClockHourFormat; show_seconds?: boolean } = $props();
+		show_seconds = false,
+		size = 'large'
+	}: {
+		timezone?: string;
+		hour_format?: ClockHourFormat;
+		show_seconds?: boolean;
+		size?: 'small' | 'medium' | 'large';
+	} = $props();
+
+	const MAX_SIZE = {
+		small: 'var(--h-type-hero)',
+		medium: 'var(--h-type-clock-medium)',
+		large: 'var(--h-type-clock)'
+	};
 
 	let now = $derived($timer);
 
@@ -43,15 +55,24 @@
 	);
 </script>
 
-<div>
+<div class="face" style:--clock-max={MAX_SIZE[size]} style:--clock-chars={time.length}>
 	<div class="clock">{time}</div>
 	<div class="date">{date}</div>
 	<div class="greeting">{greeting}</div>
 </div>
 
 <style>
+	.face {
+		container-type: inline-size;
+	}
+
+	/* the chosen size, shrunk so the time never overflows the rail's width */
 	.clock {
-		font-size: var(--h-type-clock);
+		font-size: min(
+			var(--clock-max),
+			var(--clock-cap, var(--clock-max)),
+			calc(100cqi / (var(--clock-chars) * 0.62))
+		); /* literal ok: type tokens shrunk to the rail's width */
 		font-weight: 600;
 		line-height: 0.9;
 		letter-spacing: -3px;
@@ -71,8 +92,17 @@
 		margin-top: 2px;
 	}
 	@media (max-width: 900px) {
+		.face {
+			--clock-cap: var(--h-type-hero);
+		}
+	}
+
+	@supports not (container-type: inline-size) {
 		.clock {
-			font-size: var(--h-type-hero);
+			font-size: min(
+				var(--clock-max),
+				var(--clock-cap, var(--clock-max))
+			); /* literal ok: the smaller of two type tokens */
 		}
 	}
 </style>
