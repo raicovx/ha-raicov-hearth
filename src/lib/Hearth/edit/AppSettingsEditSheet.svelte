@@ -26,6 +26,10 @@
 	let feedbackNeedsHttps = $state(false);
 	let token = $state($configuration?.token ?? '');
 	let customJs = $state($configuration?.custom_js ?? false);
+	let plexUrl = $state($configuration?.plex_url ?? '');
+	// the saved token never reaches the browser; a new one replaces it
+	let plexToken = $state('');
+	let plexUrlInvalid = $derived(!!plexUrl.trim() && !URL.canParse(plexUrl.trim()));
 	let installedVersion = $state<string>();
 	let saveError = $state<string | null>(null);
 	// the revision the server holds after another session saved first
@@ -33,7 +37,7 @@
 	let saving = $state(false);
 
 	function staged() {
-		return { locale, reduceMotion, touchFeedback, token, customJs };
+		return { locale, reduceMotion, touchFeedback, token, customJs, plexUrl, plexToken };
 	}
 
 	let touchFeedbackSub = $derived(
@@ -87,6 +91,10 @@
 	/** `revision` overrides the one loaded with the page, for an explicit overwrite. */
 	async function done(revision?: number) {
 		if (saving) return;
+		if (plexUrlInvalid) {
+			saveError = $lang('hearth_plex_url_invalid');
+			return;
+		}
 		saving = true;
 		saveError = null;
 		conflictRevision = null;
@@ -104,10 +112,15 @@
 		else delete next.token;
 		if (customJs) next.custom_js = true;
 		else delete next.custom_js;
+		if (plexUrl.trim()) next.plex_url = plexUrl.trim().replace(/\/+$/, '');
+		else delete next.plex_url;
 
 		try {
 			const json: Record<string, unknown> = { ...next };
 			delete json.hassUrl;
+			delete json.plex_token_set;
+			// omitted keeps the token saved on the server
+			if (plexToken.trim()) json.plex_token = plexToken.trim();
 			const response = await fetch(`${base}/_api/save_config`, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
@@ -126,7 +139,11 @@
 				return;
 			}
 
-			$configuration = { ...next, revision: (await response.json()).revision };
+			$configuration = {
+				...next,
+				plex_token_set: !!next.plex_url && (!!plexToken.trim() || !!next.plex_token_set),
+				revision: (await response.json()).revision
+			};
 			$selectedLanguage = locale;
 			$motion = reduceMotion ? 0 : MOTION.base;
 			$haptics = touchFeedback;
@@ -218,6 +235,29 @@
 					placeholder="eyJ..."
 					autocomplete="new-password"
 					spellcheck="false"
+					onfocus={handleKeyFocus}
+					onblur={handleKeyFocus}
+				/>
+			</SettingsRow>
+			<SettingsRow label={$lang('hearth_plex_server')} sub={$lang('hearth_plex_server_sub')}>
+				<input
+					class="inline-text"
+					type="url"
+					bind:value={plexUrl}
+					placeholder="http://192.168.1.10:32400"
+					aria-invalid={plexUrlInvalid || undefined}
+					spellcheck="false"
+				/>
+			</SettingsRow>
+			<SettingsRow label={$lang('hearth_plex_token')} sub={$lang('hearth_plex_token_sub')}>
+				<input
+					class="inline-text"
+					type="password"
+					bind:value={plexToken}
+					placeholder={$configuration?.plex_token_set ? $lang('hearth_saved') : ''}
+					autocomplete="new-password"
+					spellcheck="false"
+					disabled={!plexUrl.trim()}
 					onfocus={handleKeyFocus}
 					onblur={handleKeyFocus}
 				/>

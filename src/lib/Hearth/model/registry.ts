@@ -8,6 +8,7 @@ import { entitiesCard } from './cards/entities';
 import { headerCard } from './cards/header';
 import { imageCard } from './cards/image';
 import { mediaCard } from './cards/media';
+import { plexCard } from './cards/plex';
 import { scenesCard } from './cards/scenes';
 import { spotifyRecentCard } from './cards/spotify_recent';
 import { temperatureCard } from './cards/temperature';
@@ -23,6 +24,7 @@ export const CARD_DEFINITIONS = [
 	headerCard,
 	imageCard,
 	mediaCard,
+	plexCard,
 	scenesCard,
 	spotifyRecentCard,
 	temperatureCard,

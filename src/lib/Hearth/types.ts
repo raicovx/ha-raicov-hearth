@@ -270,6 +270,10 @@ type OverviewCardVariant =
 			limit?: number;
 			default_device?: string;
 	  }
+	// searches and browses the Plex server set in the app settings; libraries
+	// limits it to those library titles, players lists the Home Assistant
+	// media players offered beside the Plex apps the server can see
+	| { id: string; type: 'plex'; title?: string; libraries?: string[]; players?: string[] }
 	// the media card for whichever listed player is active; a paused player
 	// keeps the card for timeout seconds before the next one takes over
 	| {

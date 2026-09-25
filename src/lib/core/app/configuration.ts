@@ -11,10 +11,18 @@ export const ConfigurationSchema = v.object({
 	motion: v.optional(v.boolean()),
 	haptics: v.optional(v.boolean()),
 	token: v.optional(v.string()),
+	// the Plex server Hearth proxies, e.g. http://192.168.1.10:32400; the
+	// token stays on the server and never reaches the browser
+	plex_url: v.optional(v.pipe(v.string(), v.url())),
+	plex_token: v.optional(v.string()),
 	revision: v.optional(v.pipe(v.number(), v.integer(), v.minValue(0)))
 });
 
-export type Configuration = v.InferOutput<typeof ConfigurationSchema> & { hassUrl?: string };
+export type Configuration = v.InferOutput<typeof ConfigurationSchema> & {
+	hassUrl?: string;
+	/** Set by the page load in place of plex_token, which stays on the server. */
+	plex_token_set?: boolean;
+};
 
 export interface PersistentNotification {
 	created_at: string;

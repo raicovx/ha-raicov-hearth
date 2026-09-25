@@ -98,6 +98,10 @@ export const load = (async ({
 			);
 	const hearthNeedsSetup = !hearthError && (hearth === undefined || hearthKeys.length === 0);
 
+	// the Plex token is for the server-side proxy only
+	configuration.plex_token_set = !!configuration.plex_token;
+	delete configuration.plex_token;
+
 	// Ingress: Supervisor forwards the browser's HA origin. Fusion used this
 	// as hassUrl so OAuth authorizes against the HTTPS Nabu Casa (or local)
 	// host the browser is already on.

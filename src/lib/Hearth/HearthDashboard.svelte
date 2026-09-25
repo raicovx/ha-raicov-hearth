@@ -14,6 +14,8 @@
 	import { foldedTopCount } from './config';
 	import { mediaQueriesIn, railWidgetShown } from './visibility';
 	import ControlPopup from './ControlPopup.svelte';
+	import PlexBrowser from './cards/plex/Browser.svelte';
+	import { plexBrowser } from './plex';
 	import EmptyState from './EmptyState.svelte';
 	import Rail from './Rail.svelte';
 	import RoomDetail from './RoomDetail.svelte';
@@ -267,6 +269,11 @@
 		<ScrollEdge edge="bottom" size={96} active={layoutCut.bottom} />
 	{/if}
 	<ControlPopup />
+	{#if $plexBrowser}
+		{#key $plexBrowser}
+			<PlexBrowser browser={$plexBrowser} />
+		{/key}
+	{/if}
 	{#if $hearthEditMode}
 		<!-- the edit sheets and their editors load with edit mode, not the dashboard -->
 		{#await import('./edit/EditorHost.svelte') then EditorHost}

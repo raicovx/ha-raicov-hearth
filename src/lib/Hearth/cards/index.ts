@@ -11,6 +11,7 @@ import { entitiesCard } from './entities/descriptor';
 import { headerCard } from './header/descriptor';
 import { imageCard } from './image/descriptor';
 import { mediaCard } from './media/descriptor';
+import { plexCard } from './plex/descriptor';
 import { scenesCard } from './scenes/descriptor';
 import { spotifyRecentCard } from './spotify_recent/descriptor';
 import { temperatureCard } from './temperature/descriptor';
@@ -26,6 +27,7 @@ const REGISTERED = [
 	temperatureCard,
 	mediaCard,
 	spotifyRecentCard,
+	plexCard,
 	vacuumCard,
 	teslaCard,
 	cameraCard,

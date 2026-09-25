@@ -1,5 +1,6 @@
 import { json } from '@sveltejs/kit';
 import { saveYamlDocument } from '$lib/server/persistence';
+import { readPlexSettings } from '$lib/server/plex';
 import { ConfigurationSchema } from '$lib/core/app/configuration';
 import * as v from 'valibot';
 import type { RequestHandler } from './$types';
@@ -19,6 +20,13 @@ export const POST: RequestHandler = async ({ request }) => {
 	if (!parsed.success) return json({ error: 'invalid application settings' }, { status: 400 });
 	const document: Record<string, unknown> = { ...parsed.output };
 	delete document.revision;
+	// the browser never holds the Plex token: an omitted one keeps the saved
+	// token, an empty one clears it, and dropping the URL drops it too
+	if (!document.plex_url || document.plex_token === '') delete document.plex_token;
+	else if (document.plex_token === undefined) {
+		const saved = (await readPlexSettings())?.token;
+		if (saved) document.plex_token = saved;
+	}
 	try {
 		const result = await saveYamlDocument({
 			file: 'data/configuration.yaml',

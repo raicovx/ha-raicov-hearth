@@ -2,8 +2,10 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { POST } from './+server';
 import { saveYamlDocument } from '$lib/server/persistence';
+import { readPlexSettings } from '$lib/server/plex';
 
 vi.mock('$lib/server/persistence', () => ({ saveYamlDocument: vi.fn() }));
+vi.mock('$lib/server/plex', () => ({ readPlexSettings: vi.fn() }));
 
 function post(body: unknown) {
 	return POST({
@@ -44,5 +46,21 @@ describe('application settings save contract', () => {
 		});
 		vi.mocked(saveYamlDocument).mockResolvedValueOnce({ conflict: true, revision: 2 });
 		expect((await post({ revision: 1, locale: 'de' })).status).toBe(409);
+	});
+	it('keeps the saved Plex token the browser never sees, and replaces or drops it on request', async () => {
+		const url = 'http://192.168.1.10:32400';
+		vi.mocked(readPlexSettings).mockResolvedValue({ url, token: 'saved-token' });
+		vi.mocked(saveYamlDocument).mockResolvedValue({ conflict: false, revision: 1 });
+		const saved = () => vi.mocked(saveYamlDocument).mock.lastCall?.[0].body;
+
+		await post({ revision: 0, plex_url: url });
+		expect(saved()).toEqual({ plex_url: url, plex_token: 'saved-token' });
+		await post({ revision: 0, plex_url: url, plex_token: 'new-token' });
+		expect(saved()).toEqual({ plex_url: url, plex_token: 'new-token' });
+		await post({ revision: 0, plex_url: url, plex_token: '' });
+		expect(saved()).toEqual({ plex_url: url });
+		// no server, no token
+		await post({ revision: 0, plex_token: 'orphan' });
+		expect(saved()).toEqual({});
 	});
 });
