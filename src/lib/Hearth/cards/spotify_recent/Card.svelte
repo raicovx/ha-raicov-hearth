@@ -6,7 +6,8 @@
 	import { timer } from '$lib/core/app/clock';
 	import { relativeTime } from '$lib/core/i18n/time';
 	import { hearthEditMode } from '../../store';
-	import { fetchRecentTracks, spotifyPlusEntityFor, type RecentTrack } from '../../media';
+	import { spotifyPlusEntityFor } from '../../media';
+	import { fetchRecentTracks, type RecentTrack } from '../../spotify';
 	import { SPOTIFY_RECENT_DEFAULT } from '../../model/cards/spotify_recent';
 	import { getHearthInteractionMode } from '../../interaction';
 	import AnchoredPopover from '../../AnchoredPopover.svelte';

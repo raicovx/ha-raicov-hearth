@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/svelte';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import CardRenderer from '../../CardRenderer.svelte';
 import RailWidgetRenderer from '../../RailWidgetRenderer.svelte';
 
@@ -23,6 +23,12 @@ vi.mock('$lib/core/ha/history', async (importOriginal) => ({
 	})
 }));
 
+// the card and widget load on first render, so a test must not pick up the
+// subscription an earlier test left behind
+beforeEach(() => {
+	templates.render = undefined;
+});
+
 describe('template card', () => {
 	it('shows its icon and title beside the rendered list', async () => {
 		const { container } = render(CardRenderer, {
@@ -34,7 +40,7 @@ describe('template card', () => {
 				template: "{{ states('sensor.bills') }}"
 			}
 		});
-		await waitFor(() => expect(templates.render).toBeTypeOf('function'));
+		await waitFor(() => expect(templates.render).toBeTypeOf('function'), { timeout: 5000 });
 		templates.render?.('- **Rent** - $1200.00\n- **Power** - $85.40');
 
 		expect(screen.getByText('Bills')).toBeTruthy();
@@ -58,7 +64,7 @@ describe('template card', () => {
 				template: '{{ x }}'
 			}
 		});
-		await waitFor(() => expect(templates.render).toBeTypeOf('function'));
+		await waitFor(() => expect(templates.render).toBeTypeOf('function'), { timeout: 5000 });
 		templates.render?.('- **Rent** - $1200.00');
 		await waitFor(() => expect(container.querySelector('li strong')?.textContent).toBe('Rent'));
 		expect(screen.getByText('Bills')).toBeTruthy();

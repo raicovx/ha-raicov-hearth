@@ -26,8 +26,7 @@
 	import { loadMarkdownRenderer } from './markdown';
 	import { layer } from '$lib/ui/layers';
 	import ControlPopup from './ControlPopup.svelte';
-	import PlexBrowser from './cards/plex/Browser.svelte';
-	import { plexBrowser } from './plex';
+	import { plexBrowser } from './plexBrowser';
 	import EmptyState from './EmptyState.svelte';
 	import Rail from './Rail.svelte';
 	import RoomDetail from './RoomDetail.svelte';
@@ -351,9 +350,12 @@
 	{/if}
 	<ControlPopup />
 	{#if $plexBrowser}
-		{#key $plexBrowser}
-			<PlexBrowser browser={$plexBrowser} />
-		{/key}
+		<!-- the browser and the Plex client load when a Plex card first opens it -->
+		{#await import('./cards/plex/Browser.svelte') then PlexBrowser}
+			{#key $plexBrowser}
+				<PlexBrowser.default browser={$plexBrowser} />
+			{/key}
+		{/await}
 	{/if}
 	{#if $hearthEditMode}
 		<!-- the edit sheets and their editors load with edit mode, not the dashboard -->

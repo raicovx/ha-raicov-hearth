@@ -16,9 +16,10 @@ describe('Hearth type registries', () => {
 				normalize: expect.any(Function),
 				needsConfiguration: expect.any(Function),
 				entityIds: expect.any(Function),
-				component: expect.any(Function),
 				editor: expect.any(Function)
 			});
+			const component = descriptor.load ? (await descriptor.load()).default : descriptor.component;
+			expect(component, `${descriptor.type}: no component`).toEqual(expect.any(Function));
 			for (const key of [descriptor.label, descriptor.name, descriptor.sub]) {
 				expect(translated(key), `${descriptor.type}: ${key} missing from en.json`).toBe(true);
 			}
@@ -45,7 +46,8 @@ describe('Hearth type registries', () => {
 			for (const key of [descriptor.label, descriptor.name, descriptor.sub]) {
 				expect(translated(key), `${descriptor.type}: ${key} missing from en.json`).toBe(true);
 			}
-			expect(descriptor.component).toEqual(expect.any(Function));
+			const component = descriptor.load ? (await descriptor.load()).default : descriptor.component;
+			expect(component, `${descriptor.type}: no component`).toEqual(expect.any(Function));
 			// option-free widgets have nothing to edit
 			if (!['nav', 'search', 'notifications'].includes(descriptor.type)) {
 				expect((await descriptor.editor?.())?.default).toEqual(expect.any(Function));
