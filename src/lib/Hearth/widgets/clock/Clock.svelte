@@ -91,6 +91,8 @@
 		color: var(--h-text-5);
 		margin-top: 2px;
 	}
+
+	/* see breakpoints.ts */
 	@media (max-width: 900px) {
 		.face {
 			--clock-cap: var(--h-type-hero);
