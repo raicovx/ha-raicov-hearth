@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { createServer } from 'node:https';
 import express from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import dotenv from 'dotenv';
@@ -20,3 +22,13 @@ app.use(
 );
 app.use(handler);
 app.listen(port, () => console.log(`Hearth listening on port ${port}`));
+
+// optional HTTPS listener beside the plain one, which HA Ingress keeps using
+const { SSL_CERTFILE: certfile, SSL_KEYFILE: keyfile } = process.env;
+if (certfile && keyfile) {
+	const sslPort = Number(process.env.SSL_PORT || 5443);
+	createServer({ cert: readFileSync(certfile), key: readFileSync(keyfile) }, app).listen(
+		sslPort,
+		() => console.log(`Hearth listening for HTTPS on port ${sslPort}`)
+	);
+}
