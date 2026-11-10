@@ -268,6 +268,15 @@ type OverviewCardVariant =
 	| { id: string; type: 'iframe'; url?: string; title?: string; height?: number }
 	// days since an input_datetime was last reset, with a one-tap reset
 	| { id: string; type: 'days_since'; entity?: string; title?: string; icon?: string }
+	// starts a timer helper with one of several preset durations, in minutes
+	| {
+			id: string;
+			type: 'timer';
+			entity?: string;
+			title?: string;
+			icon?: string;
+			durations: number[];
+	  }
 	// a Jinja template rendered by Home Assistant as Markdown, beside an icon
 	| { id: string; type: 'template'; template?: string; title?: string; icon?: string }
 	// the Spotify account's recently played tracks through SpotifyPlus; a tap

@@ -160,6 +160,12 @@ rooms:
               type: climate
               entity: climate.living
               title: Thermostat
+        - id: timer-presets
+          type: timer
+          entity: timer.laundry
+          title: Sleep timer
+          icon: bedtime
+          durations: [40, 60, 120]
       - - id: header
           type: header
           title: Header card

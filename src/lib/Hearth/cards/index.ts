@@ -18,6 +18,7 @@ import { spotifyRecentCard } from './spotify_recent/descriptor';
 import { temperatureCard } from './temperature/descriptor';
 import { templateCard } from './template/descriptor';
 import { teslaCard } from './tesla/descriptor';
+import { timerCard } from './timer/descriptor';
 import { vacuumCard } from './vacuum/descriptor';
 
 export type { CardDescriptor, CardDraft, CardEditorProps, CardFields } from './types';
@@ -37,6 +38,7 @@ const REGISTERED = [
 	scenesCard,
 	iframeCard,
 	daysSinceCard,
+	timerCard,
 	templateCard,
 	conditionalMediaCard
 ] as const;
