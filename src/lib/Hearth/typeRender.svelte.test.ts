@@ -1,4 +1,4 @@
-import { render } from '@testing-library/svelte';
+import { render, waitFor } from '@testing-library/svelte';
 import { readFileSync } from 'node:fs';
 import { load } from 'js-yaml';
 import { describe, expect, it } from 'vitest';
@@ -64,11 +64,12 @@ describe('every configured type renders', () => {
 	});
 
 	for (const card of cards) {
-		it(`card ${card.type} (${card.id})`, () => {
+		it(`card ${card.type} (${card.id})`, async () => {
 			expect(cardNeedsConfiguration(card), 'fixture card lacks its setup').toBe(false);
 			const { container } = render(CardRenderer, { card });
 			expect(container.textContent).not.toContain('Configure');
-			expect(container.firstElementChild).not.toBeNull();
+			// some cards load on first render
+			await waitFor(() => expect(container.firstElementChild).not.toBeNull(), { timeout: 5000 });
 		});
 	}
 

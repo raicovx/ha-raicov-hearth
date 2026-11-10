@@ -23,6 +23,10 @@
 	<ConfigurationPlaceholder
 		text={fill($lang('hearth_configure_type'), { type: cardConfigurationLabel(card) })}
 	/>
+{:else if descriptor.load}
+	{#await descriptor.load() then { default: LoadedCard }}
+		<LoadedCard {card} {onentitiesreorder} {showEntityDragHandles} />
+	{/await}
 {:else}
 	<descriptor.component {card} {onentitiesreorder} {showEntityDragHandles} />
 {/if}

@@ -32,11 +32,17 @@ export interface CardComponentProps<T extends OverviewCard> {
  * Everything the dashboard needs to know about one card type. Adding a type
  * means adding a folder with these three parts and one line in cards/index.ts.
  */
-export interface CardDescriptor<T extends OverviewCard = OverviewCard> extends CardDefinition<T> {
-	component: Component<CardComponentProps<T>>;
+export type CardDescriptor<T extends OverviewCard = OverviewCard> = CardDefinition<T> & {
 	/** Loaded when the edit sheet opens, so editors stay out of the dashboard bundle. */
 	editor: () => Promise<{ default: CardEditor<T> }>;
-}
+} & (
+		| { component: Component<CardComponentProps<T>>; load?: never }
+		| {
+				component?: never;
+				/** Loaded when a card of this type first renders, for cards few dashboards use. */
+				load: () => Promise<{ default: Component<CardComponentProps<T>> }>;
+		  }
+	);
 
 export type CardEditor<T extends OverviewCard = OverviewCard> = Component<
 	CardEditorProps<T>,

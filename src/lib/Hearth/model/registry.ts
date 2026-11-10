@@ -14,6 +14,7 @@ import { scenesCard } from './cards/scenes';
 import { spotifyRecentCard } from './cards/spotify_recent';
 import { temperatureCard } from './cards/temperature';
 import { templateCard } from './cards/template';
+import { timerCard } from './cards/timer';
 import { teslaCard } from './cards/tesla';
 import { vacuumCard } from './cards/vacuum';
 export const CARD_DEFINITIONS = [
@@ -31,6 +32,7 @@ export const CARD_DEFINITIONS = [
 	spotifyRecentCard,
 	temperatureCard,
 	templateCard,
+	timerCard,
 	teslaCard,
 	vacuumCard
 ] as const;

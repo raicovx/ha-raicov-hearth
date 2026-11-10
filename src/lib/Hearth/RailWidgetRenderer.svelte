@@ -29,6 +29,12 @@
 		text={fill($lang('hearth_configure_type'), { type: railConfigurationLabel(widget) })}
 		context="widget"
 	/>
+{:else if descriptor.load}
+	{#await descriptor.load() then { default: LoadedWidget }}
+		<div class="widget-content" class:frozen inert={frozen}>
+			<LoadedWidget {widget} {onsearch} />
+		</div>
+	{/await}
 {:else if descriptor.component}
 	<div class="widget-content" class:frozen inert={frozen}>
 		<descriptor.component {widget} {onsearch} />

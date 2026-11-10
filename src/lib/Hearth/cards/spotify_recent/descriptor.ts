@@ -1,5 +1,4 @@
 import type { CardDescriptor } from '../types';
-import Card from './Card.svelte';
 import {
 	spotifyRecentCard as definition,
 	type SpotifyRecentCard
@@ -8,6 +7,6 @@ export type { SpotifyRecentCard } from '../../model/cards/spotify_recent';
 
 export const spotifyRecentCard: CardDescriptor<SpotifyRecentCard> = {
 	...definition,
-	component: Card,
+	load: () => import('./Card.svelte'),
 	editor: () => import('./Editor.svelte')
 };

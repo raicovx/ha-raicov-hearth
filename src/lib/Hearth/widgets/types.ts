@@ -29,8 +29,14 @@ export interface WidgetComponentProps<T extends RailWidget> {
  * Everything the rail needs to know about one widget type. Adding a type means
  * adding a folder with these parts and one line in widgets/index.ts.
  */
-export interface WidgetDescriptor<T extends RailWidget = RailWidget> extends WidgetDefinition<T> {
-	component: Component<WidgetComponentProps<T>>;
+export type WidgetDescriptor<T extends RailWidget = RailWidget> = WidgetDefinition<T> & {
 	/** Absent for widgets with no options. */
 	editor?: () => Promise<{ default: Component<WidgetEditorProps<T>> }>;
-}
+} & (
+		| { component: Component<WidgetComponentProps<T>>; load?: never }
+		| {
+				component?: never;
+				/** Loaded when a widget of this type first renders, for widgets few rails use. */
+				load: () => Promise<{ default: Component<WidgetComponentProps<T>> }>;
+		  }
+	);

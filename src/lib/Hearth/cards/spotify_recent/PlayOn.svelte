@@ -2,12 +2,8 @@
 	import { ICON } from '../../iconSizes';
 	import { lang } from '$lib/core/i18n';
 	import Icon from '../../Icon.svelte';
-	import {
-		fetchSpotifyDevices,
-		playSpotifyUri,
-		type RecentTrack,
-		type SpotifyDevice
-	} from '../../media';
+	import { playSpotifyUri } from '../../media';
+	import { fetchSpotifyDevices, type RecentTrack, type SpotifyDevice } from '../../spotify';
 
 	let {
 		track,

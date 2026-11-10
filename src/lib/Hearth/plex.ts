@@ -1,7 +1,5 @@
-import { writable } from 'svelte/store';
 import { base } from '$app/paths';
 import { callEntityService } from '$lib/core/ha/commands';
-import type { PlexCard } from './model/cards/plex';
 
 /*
  * The browser side of the Plex card. Every request goes through Hearth's
@@ -240,10 +238,4 @@ export function playOnEntity(entityId: string, item: PlexItem, serverName?: stri
 	if (content) callEntityService('media_player', 'play_media', entityId, content);
 }
 
-/** What the Plex browser popup shows; null when it is closed. */
-export type PlexBrowser = {
-	card: PlexCard;
-	start: { kind: 'library'; section: PlexSection } | { kind: 'item'; item: PlexItem };
-};
-
-export const plexBrowser = writable<PlexBrowser | null>(null);
+export { plexBrowser, type PlexBrowser } from './plexBrowser';

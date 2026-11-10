@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { recentTracksFrom, spotifyDevicesFrom } from './media';
+import { recentTracksFrom, spotifyDevicesFrom } from './spotify';
 
 const album = { type: 'album', uri: 'spotify:album:a' };
 
