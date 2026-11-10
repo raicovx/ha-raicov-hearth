@@ -32,7 +32,8 @@ describe('Hearth type registries', () => {
 			).not.toThrow();
 			expectSchemaContract(descriptor.type, descriptor.schema, descriptor.normalize({}));
 		}
-	});
+		// imports every card component and editor; slow under a parallel full run
+	}, 20_000);
 
 	it('gives every rail widget type a complete, unique descriptor', async () => {
 		expect(new Set(RAIL_WIDGET_TYPES.map(({ type }) => type)).size).toBe(RAIL_WIDGET_TYPES.length);
